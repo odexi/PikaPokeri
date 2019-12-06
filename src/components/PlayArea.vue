@@ -3,17 +3,17 @@
     <v-layout>
       <v-flex xs12>
         <v-card :style="'background-image: url(' + getBackGroundImage() + ');'">
-
+<!-- 
           <v-flex xs12>
             <v-card-text :style="'height: 250px; border: 1px solid;'">
               <WinningTable
               >
               </WinningTable>
             </v-card-text>
-          </v-flex>
+          </v-flex> -->
         
           <v-flex xs12>
-            <v-card-text :style="'height: 250px; border: 1px solid;'">
+            <v-card-text :style="'height: 500px; border: 1px solid;'">
               <CardsInDrawMode
                 @roundFinished="drawClicked=false"
               ></CardsInDrawMode>

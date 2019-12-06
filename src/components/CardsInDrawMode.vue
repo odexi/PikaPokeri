@@ -1,123 +1,46 @@
 <template>
   <v-layout row wrap>
     <v-flex xs2>
-      <v-img
-        v-if="hand[0]"
-        :src="cardImage(hand[0])"
-        :height="165"
-        :width="110"
-        aspect-ratio="1"
-        class="playing-card"
-      ></v-img>
+      <Card :back="true" />
     </v-flex>
     <v-flex xs2>
-      <v-img
-        v-if="hand[1]"
-        :src="cardImage(hand[1])"
-        :height="165"
-        :width="110"
-        aspect-ratio="1"
-        class="playing-card"
-      ></v-img>
+      <Card v-if="hand[0]" :card="hand[0]"></Card>
     </v-flex>
     <v-flex xs2>
-      <template v-if="hand[2]">
-        <v-img
-          :src="cardImage(hand[2])"
-          :height="165"
-          :width="110"
-          @click="onChoiceClick(0)"
-          aspect-ratio="1"
-          class="playing-card"
-        ></v-img>
-      </template>
+      <Card v-if="hand[1]" :card="hand[1]"></Card>
+    </v-flex>
+    <v-flex xs2>
+      <Card v-if="hand[2]" :card="hand[2]"></Card>
       <template v-if="!hand[2] && visible.length > 0">
-        <v-img
-          :src="redBackImage()"
-          :height="165"
-          :width="110"
-          aspect-ratio="1"
-          class="playing-card"
-        ></v-img>
-        <v-img
-          :src="redBackImage()"
-          style="transform: translateY(-155px)"
-          :height="165"
-          :width="110"
-          aspect-ratio="1"
-          class="playing-card"
-        ></v-img>
-        <v-btn
-          style="height: 165px; width: 110px; background-color: transparent"
-          @click="onChoiceClick(0)"
-        >
-          <v-img
-            :src="cardImage(visible[0])"
-            style="transform: translateX(-9px) translateY(-316px)"
-            :height="165"
-            :width="110"
-            aspect-ratio="1"
-            class="playing-card"
-          ></v-img>
-        </v-btn>
+        <Card :back="true" />
+        <Card :back="true" :class="'closed-middle-card'" />
+        <div @click="onCardClick(0)">
+          <Card :card="visible[0]" :class="'open-top-card'" />
+        </div>
       </template>
     </v-flex>
     <v-flex xs2>
-      <v-img
-        v-if="hand[3]"
-        :src="cardImage(hand[3])"
-        @click="onChoiceClick(0)"
-        :height="165"
-        :width="110"
-        aspect-ratio="1"
-        class="playing-card"
-      ></v-img>
+      <Card v-if="hand[3]" :card="hand[3]"></Card>
       <template v-if="!hand[3] && visible.length > 0">
-        <v-img
-          :src="redBackImage()"
-          :height="165"
-          :width="110"
-          aspect-ratio="1"
-          class="playing-card"
-        ></v-img>
-        <v-img
-          :src="redBackImage()"
-          style="transform: translateY(-155px)"
-          :height="165"
-          :width="110"
-          aspect-ratio="1"
-          class="playing-card"
-        ></v-img>
-        <v-btn
-          style="height: 165px; width: 110px; background-color: transparent"
-          @click="onChoiceClick(1)"
-        >
-          <v-img
-            :src="cardImage(visible[1])"
-            style="transform: translateX(-9px) translateY(-316px)"
-            :height="165"
-            :width="110"
-            aspect-ratio="1"
-            class="playing-card"
-          ></v-img>
-        </v-btn>
+        <Card :back="true" />
+        <Card :back="true" :class="'closed-middle-card'" />
+        <div @click="onCardClick(1)">
+          <Card :card="visible[1]" :class="'open-top-card'" />
+        </div>
       </template>
     </v-flex>
     <v-flex xs2>
-      <v-img
-        v-if="hand[4]"
-        :src="cardImage(hand[4])"
-        :height="165"
-        :width="110"
-        aspect-ratio="1"
-        class="playing-card"
-      ></v-img>
+      <Card v-if="hand[4]" :card="hand[4]"></Card>
     </v-flex>
   </v-layout>
 </template>
 <script>
 import Analyzer from "@/hand-analyzer/analyzer.js";
+import Card from "@/components/Card.vue";
 export default {
+  components: {
+    Card
+  },
   computed: {
     hand: {
       get() {
@@ -141,18 +64,10 @@ export default {
     }
   },
   data() {
-    return {
-      
-    };
+    return {};
   },
   methods: {
-    cardImage(card) {
-      return require("../assets/cards/" + card.suit + card.rank + ".png");
-    },
-    redBackImage() {
-      return require("../assets/cards/red_back.png");
-    },
-    async onChoiceClick(value) {
+    async onCardClick(value) {
       this.$store.dispatch("lastDraw", value);
       //console.log("Hand: ", this.hand);
       this.handleResult();
@@ -199,14 +114,17 @@ export default {
         //this.noWin++;
         console.log(result.message);
       }
-      this.$emit('roundFinished')
-    },
+      this.$emit("roundFinished");
+    }
   }
 };
 </script>
 <style scoped>
-.playing-card {
-  border-radius: 7px;
+.open-top-card {
+  transform: translateX(-9px) translateY(-316px);
+}
+.closed-middle-card {
+  transform: translateY(-155px);
 }
 </style>
 
